@@ -1,163 +1,144 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Sidebar Demo</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        .sidebar {
-            width: 320px;
-            background-color: #fdfdfd;
-            padding: 20px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            border: 1px solid #ccc;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        .profile-card {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .profile-pic {
-            width: 50px;
-            height: 50px;
-            background-color: #ccc;
-            border-radius: 50%;
-            margin-right: 15px;
-            background-image: url('https://via.placeholder.com/50');
-            background-size: cover;
-        }
-        .profile-info {
-            font-size: 14px;
-        }
-        .search-box {
-            margin-bottom: 15px;
-        }
-        .search-box input {
-            width: 100%;
-            padding: 8px 12px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
-        .menu-section {
-            margin-bottom: 20px;
-        }
-        .menu-title {
-            cursor: pointer;
-            font-weight: bold;
-            padding: 12px 15px;
-            border-radius: 8px;
-            font-size: 16px;
-            color: white;
-        }
-        .menu-items {
-            margin-top: 10px;
-            margin-left: 10px;
-            display: none;
-        }
-        .menu-items li {
-            margin: 6px 0;
-            list-style: none;
-            padding: 8px 12px;
-            background-color: #fff;
-            border-radius: 6px;
-            border: 1px solid #e0e0e0;
-            transition: background-color 0.3s, transform 0.2s;
-            cursor: pointer;
-        }
-        .menu-items li:hover {
-            background-color: #f0f8ff;
-            transform: translateX(5px);
-        }
-        .submenu {
-            display: none;
-            margin-left: 20px;
-            margin-top: 5px;
-        }
-        .submenu li {
-            font-size: 14px;
-            background-color: #f9f9f9;
-        }
-        .menu-items li i {
-            margin-right: 8px;
-        }
-        .tms-title {
-            background-color: #4CAF50;
-        }
-        .work-title {
-            background-color: #2196F3;
-        }
-    </style>
-</head>
-<body>
-    <div class="sidebar">
-        <div class="profile-card">
-            <div class="profile-pic"></div>
-            <div class="profile-info">
+<div style='display: flex; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;'>
+    <!-- Sidebar -->
+    <div style='width: 300px; background-color: #fdfdfd; padding: 20px; border: 1px solid #ccc; border-radius: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);'>
+        <div style='display: flex; align-items: center; margin-bottom: 20px;'>
+            <div style='width: 50px; height: 50px; background-color: #ccc; border-radius: 50%; margin-right: 15px; background-image: url("https://via.placeholder.com/50"); background-size: cover;'></div>
+            <div style='font-size: 14px;'>
                 <strong>Chandra Singh</strong><br>
                 <small>chandra.singh@example.com</small>
             </div>
         </div>
-
-        <div class="search-box">
-            <input type="text" placeholder="Search menu...">
+        <div style='margin-bottom: 15px;'>
+            <input type='text' placeholder='Search menu...' style='width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc;'>
         </div>
 
-        <div class="menu-section">
-            <div class="menu-title tms-title" onclick="toggleMenu('tms-menu')">TMS</div>
-            <ul class="menu-items" id="tms-menu">
-                <li><i class="fas fa-tasks"></i> Task List</li>
-                <li><i class="fas fa-user-check"></i> My Task</li>
-                <li><i class="fas fa-clipboard-check"></i> Task Accepted</li>
-                <li><i class="fas fa-times-circle"></i> Rejected Tasks</li>
-                <li><i class="fas fa-user-plus"></i> Task Assign By Me</li>
-                <li><i class="fas fa-user-clock"></i> Task Requested</li>
-                <li><i class="fas fa-thumbtack"></i> Main Task</li>
-                <li><i class="fas fa-sync-alt"></i> Recurring Main Task</li>
-                <li><i class="fas fa-calendar-times"></i> Due Date Past</li>
-                <li><i class="fas fa-hourglass-half"></i> Pending Task</li>
-                <li><i class="fas fa-check-circle"></i> Completed Task</li>
-                <li><i class="fas fa-list"></i> Overall Task</li>
-                <li><i class="fas fa-trash"></i> Delete Task</li>
-                <li><i class="fas fa-clipboard-list"></i> Activity</li>
+        <div>
+            <div onclick="toggleMenu('tms-menu')" style="cursor: pointer; font-weight: bold; padding: 12px 15px; border-radius: 8px; font-size: 16px; color: white; background-color: #4CAF50;">TMS</div>
+            <ul id="tms-menu" style="display: none; margin-left: 10px; list-style: none; padding: 0;">
+                <li style="margin: 6px 0; padding: 8px 12px; background-color: #fff; border-radius: 6px; border: 1px solid #e0e0e0;">Task List</li>
+                <li style="margin: 6px 0; padding: 8px 12px; background-color: #fff; border-radius: 6px; border: 1px solid #e0e0e0;">My Task</li>
+                <li style="margin: 6px 0; padding: 8px 12px; background-color: #fff; border-radius: 6px; border: 1px solid #e0e0e0;">Completed Task</li>
             </ul>
         </div>
 
-        <div class="menu-section">
-            <div class="menu-title work-title" onclick="toggleMenu('work-menu')">Work Report</div>
-            <ul class="menu-items" id="work-menu">
-                <li onclick="toggleSubMenu('hr-submenu')"><i class="fas fa-users"></i> HR Department</li>
-                <ul class="submenu" id="hr-submenu">
-                    <li><i class="fas fa-money-check-alt"></i> HR - Payroll</li>
-                    <li><i class="fas fa-user-tie"></i> HR - Recruitment</li>
-                    <li><i class="fas fa-user-alt"></i> HR - Generalist</li>
-                    <li><i class="fas fa-users"></i> HR - Manager</li>
+        <div>
+            <div onclick="toggleMenu('work-menu')" style="margin-top: 20px; padding: 12px; background-color: #2196F3; color: white; border-radius: 8px; cursor: pointer; text-align: center;">Work Report</div>
+            <ul id="work-menu" style="display: none; margin-left: 10px; list-style: none; padding: 0;">
+                <li onclick="toggleMenu('hr-menu')" style="margin: 6px 0; padding: 8px 12px; background-color: #e3f2fd; border-radius: 6px; border: 1px solid #90caf9; cursor: pointer;">HR Department</li>
+                <ul id="hr-menu" style="display: none; margin-left: 15px; list-style: none;">
+                    <li onclick="showWorkForm()" style="margin: 6px 0; padding: 8px 12px; background-color: #fff3e0; border-radius: 6px; border: 1px solid #ffcc80; cursor: pointer;">HR - Payroll</li>
+                    <li style="margin: 6px 0; padding: 8px 12px; background-color: #f3e5f5; border-radius: 6px; border: 1px solid #ce93d8;">HR - Recruitment</li>
                 </ul>
-                <li><i class="fas fa-briefcase"></i> Management Department</li>
-                <li><i class="fas fa-handshake"></i> BD Department</li>
-                <li><i class="fas fa-vial"></i> IV Department</li>
-                <li><i class="fas fa-vials"></i> NIV Department</li>
-                <li><i class="fas fa-chalkboard-teacher"></i> FE Department</li>
-                <li><i class="fas fa-graduation-cap"></i> Coaching Department</li>
-                <li><i class="fas fa-dollar-sign"></i> Finance Department</li>
-                <li><i class="fas fa-check-double"></i> QC Department</li>
             </ul>
         </div>
     </div>
 
-    <script>
-        function toggleMenu(menuId) {
-            var menu = document.getElementById(menuId);
-            menu.style.display = (menu.style.display === "none" || menu.style.display === "") ? "block" : "none";
+    <!-- Content Area -->
+    <div style='flex: 1; padding: 30px;'>
+        <div id='content-area'></div>
+        <div id='preview-area' style='margin-top: 40px;'></div>
+    </div>
+</div>
+
+<script>
+    function toggleMenu(menuId) {
+        var menu = document.getElementById(menuId);
+        menu.style.display = (menu.style.display === "none" || menu.style.display === "") ? "block" : "none";
+    }
+
+    function showWorkForm() {
+        const today = new Date().toISOString().split("T")[0];
+        document.getElementById("content-area").innerHTML = `
+            <h2 style="font-size: 24px; margin-bottom: 15px;">Work Report Form - HR Payroll</h2>
+            <form id="work-form" onsubmit="return handleSubmit(event)">
+                <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%; table-layout: fixed; font-size: 14px;">
+                    <thead>
+                        <tr style="background-color: #4a90e2; color: white;">
+                            <th colspan="2" style="text-align: left; padding: 10px;">
+                                <label><strong>Date:</strong>
+                                    <input type="date" id="work-date" value="${today}" required style="margin-left: 10px;">
+                                </label>
+                            </th>
+                            <th colspan="2" style="text-align: right; padding: 10px;">
+                                <label><strong>Status:</strong>
+                                    <select id="status-select" required style="margin-left: 10px;">
+                                        <option value="">-- Select --</option>
+                                        <option value="Full Day">Full Day</option>
+                                        <option value="Half Day">Half Day</option>
+                                        <option value="Leave">Leave</option>
+                                        <option value="Short Leave">Short Leave</option>
+                                        <option value="Weekoff">Weekoff</option>
+                                    </select>
+                                </label>
+                            </th>
+                        </tr>
+                        <tr style="background-color: #b8860b; color: white;">
+                            <th style="width: 8%; padding: 8px;">Sl No</th>
+                            <th style="width: 42%; padding: 8px;">Task</th>
+                            <th style="width: 20%; padding: 8px;">Time (mins)</th>
+                            <th style="width: 30%; padding: 8px;">Remark</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${[1, 2, 3, 4].map(i => `
+                            <tr style="background-color: ${i % 2 === 0 ? '#fff' : '#f9f9f9'};">
+                                <td style="text-align: center; padding: 8px;">${i}</td>
+                                <td><input type="text" name="task${i}" style="width: 100%; padding: 6px;"></td>
+                                <td><input type="number" name="time${i}" class="time-input" min="0" oninput="calculateTotal()" style="width: 100%; padding: 6px;"></td>
+                                <td><input type="text" name="remark${i}" style="width: 100%; padding: 6px;"></td>
+                            </tr>
+                        `).join('')}
+                        <tr style="background-color: #f2f2f2;">
+                            <td colspan="3" style="text-align: right; padding: 10px;"><strong>Total:</strong></td>
+                            <td style="padding: 8px;"><input type="text" id="total-time" readonly style="width: 100%; padding: 6px;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="margin-top: 15px; text-align: right;">
+                    <button type="submit" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 6px; font-size: 16px;">Submit</button>
+                </div>
+            </form>`;
+        document.getElementById("preview-area").innerHTML = "";
+    }
+
+    function calculateTotal() {
+        let inputs = document.querySelectorAll('.time-input');
+        let totalMins = 0;
+        inputs.forEach(input => {
+            let val = parseInt(input.value);
+            if (!isNaN(val)) totalMins += val;
+        });
+        let hours = Math.floor(totalMins / 60);
+        let minutes = totalMins % 60;
+        document.getElementById('total-time').value = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}`;
+    }
+
+    function handleSubmit(event) {
+        event.preventDefault();
+        const date = document.getElementById("work-date").value;
+        const status = document.getElementById("status-select").value;
+        const total = document.getElementById("total-time").value;
+
+        let tasks = [];
+        for (let i = 1; i <= 4; i++) {
+            let task = document.querySelector(`[name=task${i}]`).value;
+            let time = document.querySelector(`[name=time${i}]`).value;
+            let remark = document.querySelector(`[name=remark${i}]`).value;
+            if (task || time || remark) {
+                tasks.push({ task: task, time: time, remark: remark });
+            }
         }
 
-        function toggleSubMenu(submenuId) {
-            event.stopPropagation();
-            var submenu = document.getElementById(submenuId);
-            submenu.style.display = (submenu.style.display === "none" || submenu.style.display === "") ? "block" : "none";
+        const json = JSON.stringify(tasks).replace(/'/g, "\'");
+        const pyCmd = `save_work_report('${date}', '${status}', '${total}', ${json})`;
+
+        if (typeof google !== "undefined" && google.colab) {
+            alert("This won't work in Google Colab. Use Jupyter Notebook.");
+        } else {
+            IPython.notebook.kernel.execute(pyCmd);
         }
-    </script>
-</body>
-</html>
+
+        document.getElementById("preview-area").innerHTML = `<h3>✅ Data saved to Excel.</h3>`;
+        return false;
+    }
+</script>
