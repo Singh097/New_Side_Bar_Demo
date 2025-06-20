@@ -1,144 +1,243 @@
-<div style='display: flex; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;'>
-    <!-- Sidebar -->
-    <div style='width: 300px; background-color: #fdfdfd; padding: 20px; border: 1px solid #ccc; border-radius: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);'>
-        <div style='display: flex; align-items: center; margin-bottom: 20px;'>
-            <div style='width: 50px; height: 50px; background-color: #ccc; border-radius: 50%; margin-right: 15px; background-image: url("https://via.placeholder.com/50"); background-size: cover;'></div>
-            <div style='font-size: 14px;'>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Work Report</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        .container { display: flex; width: 100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .sidebar { width: 320px; background-color: #fdfdfd; padding: 20px; border-right: 1px solid #ccc; }
+        .profile-card { display: flex; align-items: center; margin-bottom: 20px; }
+        .profile-pic { width: 50px; height: 50px; background-color: #ccc; border-radius: 50%; margin-right: 15px; background-image: url('https://via.placeholder.com/50'); background-size: cover; }
+        .profile-info { font-size: 14px; }
+        .search-box { margin-bottom: 15px; }
+        .search-box input { width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; }
+        .menu-section { margin-bottom: 20px; }
+        .menu-title { cursor: pointer; font-weight: bold; padding: 12px 15px; border-radius: 8px; font-size: 16px; color: white; }
+        .menu-items { margin-top: 10px; margin-left: 10px; display: none; }
+        .menu-items li { margin: 6px 0; list-style: none; padding: 8px 12px; background-color: #fff; border-radius: 6px; border: 1px solid #e0e0e0; transition: background-color 0.3s, transform 0.2s; cursor: pointer; }
+        .menu-items li:hover { background-color: #f0f8ff; transform: translateX(5px); }
+        .submenu { display: none; margin-left: 20px; margin-top: 5px; }
+        .submenu li { font-size: 14px; background-color: #f9f9f9; }
+        .menu-items li i { margin-right: 8px; }
+        .tms-title { background-color: #4CAF50; }
+        .work-title { background-color: #2196F3; }
+        #form-container { flex-grow: 1; padding: 20px; display: none; background-color: #f8f8f8; }
+        .form-row { display: flex; gap: 20px; margin-bottom: 20px; align-items: center; }
+        .form-row > div { flex: 1; }
+        select, input[type="date"], input[type="text"] { width: 100%; padding: 5px; box-sizing: border-box; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+        table, th, td { border: 1px solid #ccc; }
+        th, td { padding: 8px; text-align: left; }
+        th { background-color: #e8e8e8; }
+        tfoot { display: none; }
+        tfoot td { background-color: #f0f0f0; font-weight: bold; text-align: right; }
+        .submit-btn, .add-btn { padding: 10px 16px; margin-right: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer; }
+        .submit-btn:hover, .add-btn:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="sidebar">
+        <div class="profile-card">
+            <div class="profile-pic"></div>
+            <div class="profile-info">
                 <strong>Chandra Singh</strong><br>
                 <small>chandra.singh@example.com</small>
             </div>
         </div>
-        <div style='margin-bottom: 15px;'>
-            <input type='text' placeholder='Search menu...' style='width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc;'>
+        <div class="search-box">
+            <input type="text" placeholder="Search menu...">
         </div>
-
-        <div>
-            <div onclick="toggleMenu('tms-menu')" style="cursor: pointer; font-weight: bold; padding: 12px 15px; border-radius: 8px; font-size: 16px; color: white; background-color: #4CAF50;">TMS</div>
-            <ul id="tms-menu" style="display: none; margin-left: 10px; list-style: none; padding: 0;">
-                <li style="margin: 6px 0; padding: 8px 12px; background-color: #fff; border-radius: 6px; border: 1px solid #e0e0e0;">Task List</li>
-                <li style="margin: 6px 0; padding: 8px 12px; background-color: #fff; border-radius: 6px; border: 1px solid #e0e0e0;">My Task</li>
-                <li style="margin: 6px 0; padding: 8px 12px; background-color: #fff; border-radius: 6px; border: 1px solid #e0e0e0;">Completed Task</li>
+        <div class="menu-section">
+            <div class="menu-title tms-title" onclick="toggleMenu('tms-menu')">TMS</div>
+            <ul class="menu-items" id="tms-menu">
+                <li><i class="fas fa-tasks"></i> Task List</li>
+                <li><i class="fas fa-user-check"></i> My Task</li>
             </ul>
         </div>
-
-        <div>
-            <div onclick="toggleMenu('work-menu')" style="margin-top: 20px; padding: 12px; background-color: #2196F3; color: white; border-radius: 8px; cursor: pointer; text-align: center;">Work Report</div>
-            <ul id="work-menu" style="display: none; margin-left: 10px; list-style: none; padding: 0;">
-                <li onclick="toggleMenu('hr-menu')" style="margin: 6px 0; padding: 8px 12px; background-color: #e3f2fd; border-radius: 6px; border: 1px solid #90caf9; cursor: pointer;">HR Department</li>
-                <ul id="hr-menu" style="display: none; margin-left: 15px; list-style: none;">
-                    <li onclick="showWorkForm()" style="margin: 6px 0; padding: 8px 12px; background-color: #fff3e0; border-radius: 6px; border: 1px solid #ffcc80; cursor: pointer;">HR - Payroll</li>
-                    <li style="margin: 6px 0; padding: 8px 12px; background-color: #f3e5f5; border-radius: 6px; border: 1px solid #ce93d8;">HR - Recruitment</li>
+        <div class="menu-section">
+            <div class="menu-title work-title" onclick="toggleMenu('work-menu')">Work Report</div>
+            <ul class="menu-items" id="work-menu">
+                <li onclick="toggleSubMenu('hr-submenu')"><i class="fas fa-users"></i> HR Department</li>
+                <ul class="submenu" id="hr-submenu">
+                    <li id="hr-payroll" onclick="showForm(event)"><i class="fas fa-money-check-alt"></i> HR - Payroll</li>
                 </ul>
             </ul>
         </div>
     </div>
 
-    <!-- Content Area -->
-    <div style='flex: 1; padding: 30px;'>
-        <div id='content-area'></div>
-        <div id='preview-area' style='margin-top: 40px;'></div>
+    <div id="form-container">
+        <h2>Work Report Form</h2>
+        <div class="form-row">
+            <div>
+                <label><strong>Date:</strong></label>
+                <input type="date" id="report-date" min="" max="" />
+            </div>
+            <div>
+                <label><strong>Status:</strong></label>
+                <select id="status-select" onchange="toggleFormBody()">
+                    <option value="">-- Select --</option>
+                    <option value="Leave">Leave</option>
+                    <option value="Half Day">Half Day</option>
+                    <option value="Full Day">Full Day</option>
+                    <option value="Short Leave">Short Leave</option>
+                    <option value="Week Off">Week Off</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="form-body">
+            <table id="payroll-table">
+                <thead>
+                <tr>
+                    <th>Sr No.</th>
+                    <th>Work Done</th>
+                    <th>Minimum Work</th>
+                    <th>Time_Utli (Minutes)</th>
+                    <th>Remarks</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td><input type="text" /></td>
+                    <td><input type="text" /></td>
+                    <td><input type="text" placeholder="e.g., 90" oninput="updateLiveTotal()" /></td>
+                    <td><input type="text" /></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td></td><td></td><td></td>
+                    <td id="total-time-cell"><strong></strong></td>
+                    <td></td>
+                </tr>
+                </tfoot>
+            </table>
+            <button class="add-btn" id="addRowBtn">+ Add Row</button>
+        </div>
+        <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
 </div>
 
 <script>
+    const today = new Date().toISOString().split("T")[0];
+    const minDate = new Date();
+    minDate.setDate(minDate.getDate() - 2);
+    const minDateStr = minDate.toISOString().split("T")[0];
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("report-date").value = today;
+        document.getElementById("report-date").min = minDateStr;
+        document.getElementById("report-date").max = today;
+
+        document.getElementById("addRowBtn").addEventListener("click", addRow);
+    });
+
     function toggleMenu(menuId) {
-        var menu = document.getElementById(menuId);
+        const menu = document.getElementById(menuId);
         menu.style.display = (menu.style.display === "none" || menu.style.display === "") ? "block" : "none";
     }
 
-    function showWorkForm() {
-        const today = new Date().toISOString().split("T")[0];
-        document.getElementById("content-area").innerHTML = `
-            <h2 style="font-size: 24px; margin-bottom: 15px;">Work Report Form - HR Payroll</h2>
-            <form id="work-form" onsubmit="return handleSubmit(event)">
-                <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%; table-layout: fixed; font-size: 14px;">
-                    <thead>
-                        <tr style="background-color: #4a90e2; color: white;">
-                            <th colspan="2" style="text-align: left; padding: 10px;">
-                                <label><strong>Date:</strong>
-                                    <input type="date" id="work-date" value="${today}" required style="margin-left: 10px;">
-                                </label>
-                            </th>
-                            <th colspan="2" style="text-align: right; padding: 10px;">
-                                <label><strong>Status:</strong>
-                                    <select id="status-select" required style="margin-left: 10px;">
-                                        <option value="">-- Select --</option>
-                                        <option value="Full Day">Full Day</option>
-                                        <option value="Half Day">Half Day</option>
-                                        <option value="Leave">Leave</option>
-                                        <option value="Short Leave">Short Leave</option>
-                                        <option value="Weekoff">Weekoff</option>
-                                    </select>
-                                </label>
-                            </th>
-                        </tr>
-                        <tr style="background-color: #b8860b; color: white;">
-                            <th style="width: 8%; padding: 8px;">Sl No</th>
-                            <th style="width: 42%; padding: 8px;">Task</th>
-                            <th style="width: 20%; padding: 8px;">Time (mins)</th>
-                            <th style="width: 30%; padding: 8px;">Remark</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${[1, 2, 3, 4].map(i => `
-                            <tr style="background-color: ${i % 2 === 0 ? '#fff' : '#f9f9f9'};">
-                                <td style="text-align: center; padding: 8px;">${i}</td>
-                                <td><input type="text" name="task${i}" style="width: 100%; padding: 6px;"></td>
-                                <td><input type="number" name="time${i}" class="time-input" min="0" oninput="calculateTotal()" style="width: 100%; padding: 6px;"></td>
-                                <td><input type="text" name="remark${i}" style="width: 100%; padding: 6px;"></td>
-                            </tr>
-                        `).join('')}
-                        <tr style="background-color: #f2f2f2;">
-                            <td colspan="3" style="text-align: right; padding: 10px;"><strong>Total:</strong></td>
-                            <td style="padding: 8px;"><input type="text" id="total-time" readonly style="width: 100%; padding: 6px;"></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div style="margin-top: 15px; text-align: right;">
-                    <button type="submit" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 6px; font-size: 16px;">Submit</button>
-                </div>
-            </form>`;
-        document.getElementById("preview-area").innerHTML = "";
+    function toggleSubMenu(submenuId) {
+        event.stopPropagation();
+        const submenu = document.getElementById(submenuId);
+        submenu.style.display = (submenu.style.display === "none" || submenu.style.display === "") ? "block" : "none";
     }
 
-    function calculateTotal() {
-        let inputs = document.querySelectorAll('.time-input');
-        let totalMins = 0;
-        inputs.forEach(input => {
-            let val = parseInt(input.value);
-            if (!isNaN(val)) totalMins += val;
-        });
-        let hours = Math.floor(totalMins / 60);
-        let minutes = totalMins % 60;
-        document.getElementById('total-time').value = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}`;
+    function showForm(event) {
+        event.stopPropagation();
+        document.getElementById("form-container").style.display = "block";
+        toggleFormBody();
+        updateLiveTotal();
     }
 
-    function handleSubmit(event) {
-        event.preventDefault();
-        const date = document.getElementById("work-date").value;
+    function toggleFormBody() {
         const status = document.getElementById("status-select").value;
-        const total = document.getElementById("total-time").value;
+        const formBody = document.getElementById("form-body");
+        formBody.style.display = (status === "Leave") ? "none" : "block";
+        updateLiveTotal();
+    }
 
-        let tasks = [];
-        for (let i = 1; i <= 4; i++) {
-            let task = document.querySelector(`[name=task${i}]`).value;
-            let time = document.querySelector(`[name=time${i}]`).value;
-            let remark = document.querySelector(`[name=remark${i}]`).value;
-            if (task || time || remark) {
-                tasks.push({ task: task, time: time, remark: remark });
-            }
-        }
-
-        const json = JSON.stringify(tasks).replace(/'/g, "\'");
-        const pyCmd = `save_work_report('${date}', '${status}', '${total}', ${json})`;
-
-        if (typeof google !== "undefined" && google.colab) {
-            alert("This won't work in Google Colab. Use Jupyter Notebook.");
+    function updateLiveTotal() {
+        let totalMinutes = 0;
+        const inputs = document.querySelectorAll('#payroll-table tbody tr td:nth-child(4) input');
+        inputs.forEach(input => {
+            const val = parseInt(input.value);
+            if (!isNaN(val)) totalMinutes += val;
+        });
+        const totalRow = document.querySelector("#payroll-table tfoot");
+        if (totalMinutes > 0) {
+            const totalHours = Math.floor(totalMinutes / 60);
+            const remainingMinutes = totalMinutes % 60;
+            const formatted = `${totalHours}:${String(remainingMinutes).padStart(2, '0')}`;
+            document.getElementById("total-time-cell").innerHTML = `<strong>Total: ${formatted}</strong>`;
+            totalRow.style.display = "table-row-group";
         } else {
-            IPython.notebook.kernel.execute(pyCmd);
+            totalRow.style.display = "none";
+        }
+    }
+
+    function addRow() {
+        const tbody = document.querySelector('#payroll-table tbody');
+        const rowCount = tbody.rows.length + 1;
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td>${rowCount}</td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" placeholder="e.g., 60" oninput="updateLiveTotal()" /></td>
+            <td><input type="text" /></td>
+        `;
+        tbody.appendChild(newRow);
+    }
+
+    function submitForm() {
+        const date = document.getElementById("report-date").value;
+        const status = document.getElementById("status-select").value;
+        const formBody = document.getElementById("form-body");
+
+        let data = [];
+        let totalMinutes = 0;
+
+        if (formBody.style.display !== "none") {
+            const rows = document.querySelectorAll('#payroll-table tbody tr');
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td input');
+                const workDone = cells[0].value;
+                const minWork = cells[1].value;
+                const timeUtil = cells[2].value;
+                const remarks = cells[3].value;
+                data.push({ workDone, minWork, timeUtil, remarks });
+
+                const minutes = parseInt(timeUtil);
+                if (!isNaN(minutes)) {
+                    totalMinutes += minutes;
+                }
+            });
         }
 
-        document.getElementById("preview-area").innerHTML = `<h3>✅ Data saved to Excel.</h3>`;
-        return false;
+        const totalHours = Math.floor(totalMinutes / 60);
+        const remainingMinutes = totalMinutes % 60;
+        const totalTimeFormatted = `${totalHours}:${String(remainingMinutes).padStart(2, '0')}`;
+
+        const totalRow = document.querySelector("#payroll-table tfoot");
+        if (totalMinutes > 0) {
+            document.getElementById("total-time-cell").innerHTML = `<strong>Total: ${totalTimeFormatted}</strong>`;
+            totalRow.style.display = "table-row-group";
+        } else {
+            totalRow.style.display = "none";
+        }
+
+        alert(
+            `Date: ${date}\nStatus: ${status}` +
+            (data.length ? `\n\nWork Entries:\n` + data.map((d, i) =>
+                `${i + 1}. Work: ${d.workDone}, Min: ${d.minWork}, Time: ${d.timeUtil} min, Remarks: ${d.remarks}`
+            ).join('\n') : '') +
+            (totalMinutes > 0 ? `\n\nTotal Time Utilized: ${totalTimeFormatted}` : '')
+        );
     }
 </script>
+</body>
+</html>
