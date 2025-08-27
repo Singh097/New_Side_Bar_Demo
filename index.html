@@ -106,6 +106,7 @@
 <body>
 
 <!-- --- LOGIN SECTION --- -->
+<!-- --- Login Section --- -->
 <div id="login-section" class="login-container">
     <div class="login-box">
         <h2>Welcome Back</h2>
@@ -123,17 +124,586 @@
     </div>
 </div>
 
-<!-- --- MAIN APP --- -->
+<!-- --- Main App --- -->
 <div class="app-wrapper" id="app-wrapper">
-    <!-- COPY ALL APP HTML HERE FROM PYTHON TEMPLATE -->
-    <!-- Make sure in date inputs: min="2025-08-25" max="2025-08-27" value="2025-08-27" -->
+    <div class="layout">
+        <div class="sidebar">
+            <div>
+                <div class="profile-card">
+                    <div class="profile-pic" id="profile-pic"></div>
+                    <div class="profile-info">
+                        <strong id="user-name">User</strong><br>
+                        <small id="user-email">user@example.com</small><br>
+                        <small id="user-role" class="small">Role: -</small>
+                    </div>
+                </div>
+
+                <div class="menu-section">
+                    <div class="menu-title work-title" onclick="toggleMenu('work-menu')">Work Report</div>
+                    <ul class="menu-items" id="work-menu">
+
+                        <!-- HR -->
+                        <li class="dept hr" onclick="toggleSubMenu(event, 'hr-submenu')"><i class="fas fa-users"></i> HR Department</li>
+                        <ul class="submenu hr" id="hr-submenu">
+                            <li onclick="showForm(event, 'HR - Payroll')"><i class="fas fa-money-check-alt"></i> HR - Payroll</li>
+                        </ul>
+
+                        <!-- IT -->
+                        <li class="dept it" onclick="toggleSubMenu(event, 'it-submenu')"><i class="fas fa-laptop-code"></i> IT Department</li>
+                        <ul class="submenu it" id="it-submenu">
+                            <li onclick="showForm(event, 'IT - Development')"><i class="fas fa-code"></i> IT - Development</li>
+                            <li onclick="showForm(event, 'IT - Support')"><i class="fas fa-headset"></i> IT - Support</li>
+                        </ul>
+
+                        <!-- Finance -->
+                        <li class="dept finance" onclick="toggleSubMenu(event, 'finance-submenu')"><i class="fas fa-coins"></i> Finance Department</li>
+                        <ul class="submenu finance" id="finance-submenu">
+                            <li onclick="showForm(event, 'Finance - Audit')"><i class="fas fa-file-invoice"></i> Finance - Audit</li>
+                            <li onclick="showForm(event, 'Finance - Budgeting')"><i class="fas fa-chart-line"></i> Finance - Budgeting</li>
+                        </ul>
+
+                        <!-- Marketing -->
+                        <li class="dept marketing" onclick="toggleSubMenu(event, 'marketing-submenu')"><i class="fas fa-bullhorn"></i> Marketing Department</li>
+                        <ul class="submenu marketing" id="marketing-submenu">
+                            <li onclick="showForm(event, 'Marketing - Campaigns')"><i class="fas fa-ad"></i> Marketing - Campaigns</li>
+                            <li onclick="showForm(event, 'Marketing - Research')"><i class="fas fa-search"></i> Marketing - Research</li>
+                        </ul>
+
+                    </ul>
+                </div>
+
+                <!-- Manager & Admin Panels (hidden by default) -->
+                <div id="manager-dashboard" class="panel hidden">
+                  <h3>Manager Panel</h3>
+                  <ul style="padding-left:18px;">
+                    <li><a href="#" onclick="viewDeptReports()">View Department Reports</a></li>
+                    <li><a href="#" onclick="viewPendingForManager()">Pending Approvals</a></li>
+                  </ul>
+                </div>
+
+                <div id="admin-dashboard" class="panel hidden">
+                  <h3>Admin Panel</h3>
+                  <ul style="padding-left:18px;">
+                    <li><a href="#" onclick="viewAllReports()">View All Reports</a></li>
+                    <li><a href="#" onclick="manageUsers()">Manage Users</a></li>
+                  </ul>
+                </div>
+            </div>
+
+            <button class="logout-btn" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+
+        <div id="main-area">
+            <!-- Form / Panels will show here -->
+            <div id="form-container" class="panel">
+                <h2 id="form-title">Work Report Form</h2>
+                <div class="form-row">
+                    <div class="form-col">
+                        <label>Employee ID:</label>
+                        <input type="text" id="employee-id" placeholder="Enter Employee ID" required />
+                        <label>Date:</label>
+                        <input type="date" id="report-date" min="__MIN_DATE__" max="__TODAY__" value="__TODAY__" required />
+                    </div>
+                    <div class="form-col">
+                        <label>Status:</label>
+                        <select id="status-select" onchange="toggleFormBody()" required>
+                            <option value="">-- Select --</option>
+                            <option value="Leave">Leave</option>
+                            <option value="Half Day">Half Day</option>
+                            <option value="Full Day">Full Day</option>
+                            <option value="Short Leave">Short Leave</option>
+                            <option value="Week Off">Week Off</option>
+                        </select>
+
+                        <label>Manager (auto)</label>
+                        <input type="text" id="manager-name" readonly placeholder="Manager will be assigned automatically" />
+                    </div>
+                </div>
+
+                <div id="form-body">
+                    <table id="work-table">
+                        <thead>
+                            <tr>
+                                <th>Sr No.</th>
+                                <th>Work Done</th>
+                                <th>Minimum Work</th>
+                                <th>Time Util (Minutes)</th>
+                                <th>Remarks</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3"><strong>Total Time:</strong></td>
+                                <td colspan="3" id="total-time-cell"><strong>0:00</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div style="display:flex; gap:10px;">
+                        <button class="submit-btn" onclick="addRow()">+ Add Row</button>
+                        <button class="submit-btn" onclick="saveDraft()">Save Draft</button>
+                        <button class="submit-btn" onclick="loadMyDraft()">Load Draft</button>
+                    </div>
+                </div>
+                <div style="margin-top:12px;">
+                    <button class="submit-btn" onclick="submitForm()">Submit</button>
+                    <button style="margin-left:8px;" onclick="viewMySubmissions()">My Submissions</button>
+                </div>
+            </div>
+
+            <div id="panel-area"></div>  <!-- dynamic content for manager/admin views -->
+        </div>
+    </div>
 </div>
 
 <script>
-// COPY ALL JS CODE FROM PYTHON TEMPLATE HERE
-// Anywhere you see "__MIN_DATE__" replace with "2025-08-25"
-// Anywhere you see "__TODAY__" replace with "2025-08-27"
+    // ---- Users (demo data). Admin can manage these via Manage Users panel ----
+    const defaultUsers = {
+        "admin": {password: "1234", dept: "all", role: "admin", name: "Administrator", email: "admin@example.com"},
+        "Hr": {password: "hr123", dept: "Human Resource", role: "employee", name: "HR Employee", email: "hr@example.com"},
+        "it": {password: "it123", dept: "it", role: "employee", name: "IT Employee", email: "it@example.com"},
+        "It_manager": {password: "itm123", dept: "it", role: "manager", name: "IT Manager", email: "itmanager@example.com"},
+        "Finance": {password: "fin123", dept: "finance", role: "employee", name: "Finance Employee", email: "finance@example.com"},
+        "Marketing_Manager": {password: "mktm123", dept: "marketing", role: "manager", name: "Marketing Manager", email: "mkt_manager@example.com"}
+    };
+    // initialize users in localStorage if not present
+    if(!localStorage.getItem('rbac_users')) {
+        localStorage.setItem('rbac_users', JSON.stringify(defaultUsers));
+    }
+
+    // current logged-in user state
+    let CURRENT_USER = null;
+
+    // ---- Utilities for reports storage ----
+    function getReports() {
+        const raw = localStorage.getItem('reports_v1') || '[]';
+        return JSON.parse(raw);
+    }
+    function saveReports(arr) {
+        localStorage.setItem('reports_v1', JSON.stringify(arr));
+    }
+    function addReport(report) {
+        const all = getReports();
+        all.push(report);
+        saveReports(all);
+    }
+    function updateReport(reportId, patch) {
+        const all = getReports();
+        const idx = all.findIndex(r=>r.id===reportId);
+        if(idx>=0) {
+            all[idx] = Object.assign({}, all[idx], patch);
+            saveReports(all);
+            return true;
+        }
+        return false;
+    }
+
+    // ---- Login / Logout / UI toggles ----
+    function togglePassword() {
+        const p = document.getElementById('login-password');
+        p.type = p.type === 'password' ? 'text' : 'password';
+    }
+
+    function loginUser() {
+        const username = document.getElementById("login-username").value.trim();
+        const password = document.getElementById("login-password").value.trim();
+        const users = JSON.parse(localStorage.getItem('rbac_users') || '{}');
+
+        if(users[username] && users[username].password === password) {
+            CURRENT_USER = Object.assign({username}, users[username]);
+            // remember me
+            if(document.getElementById('remember-me').checked) {
+                localStorage.setItem('rbac_last_user', username);
+            } else {
+                localStorage.removeItem('rbac_last_user');
+            }
+            afterLogin();
+        } else {
+            alert("Invalid login. Try: admin / it_manager / hr / it / finance (demo passwords: see code)");
+        }
+    }
+
+    function afterLogin() {
+        document.getElementById("login-section").style.display = "none";
+        document.getElementById("app-wrapper").style.display = "block";
+
+        document.getElementById("user-name").innerText = CURRENT_USER.name || CURRENT_USER.username;
+        document.getElementById("user-email").innerText = CURRENT_USER.email || '';
+        document.getElementById("user-role").innerText = 'Role: ' + (CURRENT_USER.role || '');
+        document.getElementById("profile-pic").style.backgroundImage = "url('https://via.placeholder.com/50?text='+encodeURIComponent((CURRENT_USER.name ? CURRENT_USER.name.charAt(0) : CURRENT_USER.username.charAt(0))))";
+
+        // Hide all dept menus first
+        document.querySelectorAll(".dept, .submenu").forEach(el => el.style.display = "none");
+        // Show allowed departments & menus
+        if(CURRENT_USER.role === 'admin') {
+            // show everything
+            document.querySelectorAll(".dept, .submenu").forEach(el => el.style.display = "block");
+            document.getElementById('admin-dashboard').classList.remove('hidden');
+        } else {
+            // show only user's department
+            const d = CURRENT_USER.dept;
+            if(d) {
+                document.querySelectorAll('.'+d).forEach(el=> el.style.display = 'block');
+            }
+            if(CURRENT_USER.role === 'manager') {
+                document.getElementById('manager-dashboard').classList.remove('hidden');
+            }
+        }
+
+        // Show core form by default for employees
+        document.getElementById('form-container').style.display = 'block';
+        toggleFormBody();
+        resetTable();
+        prefillManager();
+    }
+
+    function logoutUser() {
+        CURRENT_USER = null;
+        document.getElementById("app-wrapper").style.display = "none";
+        document.getElementById("login-section").style.display = "flex";
+        document.getElementById("login-username").value = "";
+        document.getElementById("login-password").value = "";
+        document.getElementById('panel-area').innerHTML = '';
+        // hide admin/manager panels
+        document.getElementById('admin-dashboard').classList.add('hidden');
+        document.getElementById('manager-dashboard').classList.add('hidden');
+    }
+
+    function toggleMenu(id) {
+        const menu = document.getElementById(id);
+        menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+    function toggleSubMenu(e, id) {
+        e.stopPropagation();
+        const submenu = document.getElementById(id);
+        submenu.style.display = (submenu.style.display === "block") ? "none" : "block";
+    }
+
+    // ---- Form body & rows ----
+    function toggleFormBody() {
+        const status = document.getElementById("status-select").value;
+        document.getElementById("form-body").style.display = (status === "Leave" || status === "Week Off") ? "none" : "block";
+    }
+
+    function addRow(data) {
+        const tbody = document.querySelector("#work-table tbody");
+        const rowCount = tbody.rows.length;
+        const workVal = data ? data.workDone : '';
+        const minVal = data ? data.minWork : '';
+        const timeVal = data ? data.timeUtil : '';
+        const remarksVal = data ? data.remarks : '';
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${rowCount + 1}</td>
+            <td><input type="text" value="${escapeHtml(workVal)}" /></td>
+            <td><input type="text" value="${escapeHtml(minVal)}" /></td>
+            <td><input type="number" oninput="updateTotalTime()" value="${timeVal}" min="0" /></td>
+            <td><input type="text" value="${escapeHtml(remarksVal)}" /></td>
+            <td><button class="remove-btn" onclick="removeRow(this)">Remove</button></td>
+        `;
+        tbody.appendChild(row);
+        updateTotalTime();
+    }
+    function removeRow(btn) {
+        btn.closest("tr").remove();
+        updateRowNumbers();
+        updateTotalTime();
+    }
+    function updateRowNumbers() {
+        const rows = document.querySelectorAll("#work-table tbody tr");
+        rows.forEach((r,i) => r.cells[0].textContent = i+1);
+    }
+    function updateTotalTime() {
+        let total = 0;
+        document.querySelectorAll("#work-table tbody tr td:nth-child(4) input").forEach(inp => {
+            const val = parseInt(inp.value);
+            if(!isNaN(val)) total += val;
+        });
+        const h = Math.floor(total/60), m = total%60;
+        document.getElementById("total-time-cell").innerHTML = `<strong>${h}:${String(m).padStart(2,'0')}</strong>`;
+    }
+    function resetTable() {
+        document.querySelector("#work-table tbody").innerHTML = "";
+        document.getElementById("total-time-cell").innerHTML = "<strong>0:00</strong>";
+    }
+
+    // ---- Drafts ----
+    function saveDraft() {
+        const draft = gatherFormData();
+        if(!draft) return;
+        localStorage.setItem('draft_' + (CURRENT_USER ? CURRENT_USER.username : 'guest'), JSON.stringify(draft));
+        alert('Draft saved locally.');
+    }
+    function loadMyDraft() {
+        const raw = localStorage.getItem('draft_' + (CURRENT_USER ? CURRENT_USER.username : 'guest'));
+        if(!raw) { alert('No draft found.'); return; }
+        const d = JSON.parse(raw);
+        populateFormWithDraft(d);
+        alert('Draft loaded.');
+    }
+    function populateFormWithDraft(d) {
+        document.getElementById('employee-id').value = d.empId || '';
+        document.getElementById('report-date').value = d.date || '__TODAY__';
+        document.getElementById('status-select').value = d.status || '';
+        toggleFormBody();
+        resetTable();
+        (d.rows || []).forEach(r => addRow(r));
+    }
+
+    // ---- Submit / Save report ----
+    function gatherFormData() {
+        const empId = document.getElementById("employee-id").value.trim();
+        const date = document.getElementById("report-date").value;
+        const status = document.getElementById("status-select").value;
+        if(!empId || !date || !status) {
+            alert("Fill Employee ID, Date, and Status first.");
+            return null;
+        }
+        let data = [];
+        document.querySelectorAll("#work-table tbody tr").forEach((row,i) => {
+            const inputs = row.querySelectorAll("td input");
+            data.push({
+                workDone: inputs[0].value.trim(),
+                minWork: inputs[1].value.trim(),
+                timeUtil: inputs[2].value.trim(),
+                remarks: inputs[3].value.trim()
+            });
+        });
+        // basic validation
+        const totalMinutes = data.reduce((s,r)=> s + (parseInt(r.timeUtil) || 0), 0);
+        if(status === 'Half Day' && totalMinutes > 240) {
+            if(!confirm('Half Day selected but total time > 240 minutes. Continue?')) return null;
+        }
+        return {
+            empId, date, status, rows: data, totalMinutes,
+            submittedBy: CURRENT_USER ? CURRENT_USER.username : 'guest',
+            dept: CURRENT_USER ? CURRENT_USER.dept : '',
+            manager: document.getElementById('manager-name').value || null
+        };
+    }
+
+    function submitForm() {
+        const payload = gatherFormData();
+        if(!payload) return;
+        // prepare report object
+        const report = {
+            id: 'r_' + Date.now() + '_' + Math.floor(Math.random()*900+100),
+            ...payload,
+            status: 'Pending',
+            createdAt: new Date().toISOString(),
+            reviewedBy: null,
+            reviewComment: null
+        };
+        addReport(report);
+        // clear draft
+        localStorage.removeItem('draft_' + (CURRENT_USER ? CURRENT_USER.username : 'guest'));
+        alert("Form submitted for " + payload.empId + " (Report ID: " + report.id + "). Status: Pending.");
+        resetTable();
+        document.getElementById('employee-id').value = '';
+        document.getElementById('status-select').value = '';
+        toggleFormBody();
+    }
+
+    // ---- Manager / Admin views ----
+    function viewMySubmissions() {
+        const all = getReports();
+        const mine = all.filter(r => r.submittedBy === (CURRENT_USER ? CURRENT_USER.username : 'guest'));
+        renderReportList(mine, 'My Submissions');
+    }
+
+    function viewDeptReports() {
+        if(!CURRENT_USER || !CURRENT_USER.dept) return alert('No dept assigned');
+        const all = getReports();
+        const deptReports = all.filter(r => r.dept === CURRENT_USER.dept);
+        renderReportList(deptReports, 'Department Reports - ' + CURRENT_USER.dept);
+    }
+
+    function viewPendingForManager() {
+        if(!CURRENT_USER || CURRENT_USER.role !== 'manager') return alert('Manager access only');
+        const all = getReports();
+        const pend = all.filter(r => r.dept === CURRENT_USER.dept && r.status === 'Pending');
+        renderReportList(pend, 'Pending Reports - ' + CURRENT_USER.dept, true);
+    }
+
+    function viewAllReports() {
+        if(!CURRENT_USER || CURRENT_USER.role !== 'admin') return alert('Admin access only');
+        const all = getReports();
+        renderReportList(all, 'All Reports (Admin)');
+    }
+
+    function renderReportList(list, title='Reports', allowApprove=false) {
+        const area = document.getElementById('panel-area');
+        if(!area) return;
+        let html = '<div class="panel"><h3>' + title + '</h3>';
+        if(!list || list.length===0) {
+            html += '<div class="small">No reports found.</div></div>';
+            area.innerHTML = html;
+            return;
+        }
+        html += '<table><thead><tr><th>ID</th><th>Employee</th><th>Date</th><th>Dept</th><th>Status</th><th>Total (min)</th><th>Actions</th></tr></thead><tbody>';
+        list.forEach(r => {
+            html += '<tr>' +
+                '<td>' + r.id + '</td>' +
+                '<td>' + escapeHtml(r.empId) + '<div class="small">by ' + r.submittedBy + '</div></td>' +
+                '<td>' + r.date + '</td>' +
+                '<td>' + r.dept + '</td>' +
+                '<td>' + r.status + '</td>' +
+                '<td>' + (r.totalMinutes || 0) + '</td>' +
+                '<td>' +
+                    '<button class="action-btn view-btn" onclick="viewReportDetails(\\'' + r.id + '\\')">View</button>';
+            if(CURRENT_USER && (CURRENT_USER.role==='manager' && r.dept===CURRENT_USER.dept && r.status==='Pending')) {
+                html += '<button class="action-btn approve-btn" onclick="approveReport(\\'' + r.id + '\\')">Approve</button><button class="action-btn reject-btn" onclick="rejectReport(\\'' + r.id + '\\')">Reject</button>';
+            }
+            if(CURRENT_USER && CURRENT_USER.role==='admin') {
+                html += '<button class="action-btn reject-btn" onclick="deleteReport(\\'' + r.id + '\\')">Delete</button>';
+            }
+            html += '</td></tr>';
+        });
+        html += '</tbody></table></div>';
+        area.innerHTML = html;
+    }
+
+    function viewReportDetails(id) {
+        const all = getReports();
+        const r = all.find(x=>x.id===id);
+        if(!r) return alert('Report not found');
+        let html = '<div class="panel"><h3>Report Details - ' + r.id + '</h3>' +
+            '<div class="small">Submitted by: ' + r.submittedBy + ' | Dept: ' + r.dept + ' | Date: ' + r.date + ' | Status: ' + r.status + '</div>' +
+            '<div style="margin-top:12px;"><strong>Rows:</strong></div>' +
+            '<table><thead><tr><th>#</th><th>Work Done</th><th>Min Work</th><th>Time (min)</th><th>Remarks</th></tr></thead><tbody>';
+        (r.rows || []).forEach((row,i)=> {
+            html += '<tr><td>' + (i+1) + '</td><td>' + escapeHtml(row.workDone) + '</td><td>' + escapeHtml(row.minWork) + '</td><td>' + row.timeUtil + '</td><td>' + escapeHtml(row.remarks) + '</td></tr>';
+        });
+        html += '</tbody></table>';
+        if(r.reviewedBy) {
+            html += '<div class="small">Reviewed by: ' + r.reviewedBy + ' | Comment: ' + escapeHtml(r.reviewComment || '') + '</div>';
+        }
+        html += '<div style="margin-top:12px;"><button class="submit-btn" onclick="renderBackToList()">Back</button></div></div>';
+        document.getElementById('panel-area').innerHTML = html;
+    }
+
+    function renderBackToList() {
+        // If manager, show pending; else if admin show all; else show mine
+        if(CURRENT_USER && CURRENT_USER.role === 'manager') viewPendingForManager();
+        else if(CURRENT_USER && CURRENT_USER.role === 'admin') viewAllReports();
+        else viewMySubmissions();
+    }
+
+    function approveReport(id) {
+        const comment = prompt('Optional approval comment:') || '';
+        const ok = updateReport(id, {status: 'Approved', reviewedBy: CURRENT_USER.username, reviewComment: comment});
+        if(ok) { alert('Report approved.'); viewPendingForManager(); } else alert('Approve failed');
+    }
+    function rejectReport(id) {
+        const reason = prompt('Reason for rejection:') || '';
+        const ok = updateReport(id, {status: 'Rejected', reviewedBy: CURRENT_USER.username, reviewComment: reason});
+        if(ok) { alert('Report rejected.'); viewPendingForManager(); } else alert('Reject failed');
+    }
+
+    function deleteReport(id) {
+        if(!confirm('Admin: delete this report permanently?')) return;
+        const all = getReports();
+        const filtered = all.filter(r=> r.id!==id);
+        saveReports(filtered);
+        alert('Deleted.');
+        viewAllReports();
+    }
+
+    // ---- Admin: Manage Users (simple) ----
+    function manageUsers() {
+        if(!CURRENT_USER || CURRENT_USER.role !== 'admin') return alert('Admin access only');
+        const users = JSON.parse(localStorage.getItem('rbac_users') || '{}');
+        let html = '<div class="panel"><h3>User Management</h3>';
+        html += '<table><thead><tr><th>Username</th><th>Name</th><th>Email</th><th>Dept</th><th>Role</th><th>Actions</th></tr></thead><tbody>';
+        Object.keys(users).forEach(u=> {
+            const x = users[u];
+            html += '<tr><td>' + u + '</td><td>' + escapeHtml(x.name) + '</td><td>' + escapeHtml(x.email) + '</td><td>' + x.dept + '</td><td>' + x.role + '</td><td><button onclick="deleteUser(\\'' + u + '\\')">Delete</button></td></tr>';
+        });
+        html += '</tbody></table>' +
+            '<h4 style="margin-top:10px;">Add New User</h4>' +
+            '<div style="display:flex; gap:8px; flex-wrap:wrap;">' +
+                '<input id="new-username" placeholder="username" />' +
+                '<input id="new-password" placeholder="password" />' +
+                '<input id="new-name" placeholder="Full name" />' +
+                '<input id="new-email" placeholder="email" />' +
+                '<select id="new-role"><option value="employee">employee</option><option value="manager">manager</option><option value="admin">admin</option></select>' +
+                '<input id="new-dept" placeholder="dept (hr/it/finance/marketing/all)" />' +
+                '<button onclick="addUser()">Add User</button>' +
+            '</div>' +
+            '<div style="margin-top:8px;"><button onclick="viewAllReports()">Back to Reports</button></div>' +
+        '</div>';
+        document.getElementById('panel-area').innerHTML = html;
+    }
+
+    function addUser() {
+        const u = document.getElementById('new-username').value.trim();
+        const p = document.getElementById('new-password').value.trim();
+        const n = document.getElementById('new-name').value.trim();
+        const e = document.getElementById('new-email').value.trim();
+        const r = document.getElementById('new-role').value;
+        const d = document.getElementById('new-dept').value.trim() || '';
+        if(!u || !p) return alert('username & password required');
+        const users = JSON.parse(localStorage.getItem('rbac_users') || '{}');
+        if(users[u]) return alert('User exists');
+        users[u] = {password: p, name: n || u, email: e || '', role: r, dept: d};
+        localStorage.setItem('rbac_users', JSON.stringify(users));
+        alert('User added');
+        manageUsers();
+    }
+    function deleteUser(u) {
+        if(!confirm('Delete user ' + u + '?')) return;
+        const users = JSON.parse(localStorage.getItem('rbac_users') || '{}');
+        delete users[u];
+        localStorage.setItem('rbac_users', JSON.stringify(users));
+        manageUsers();
+    }
+
+    // ---- Helpers: manager auto-fill ----
+    function prefillManager() {
+        // Find a manager for the user's dept (first manager in users)
+        const users = JSON.parse(localStorage.getItem('rbac_users') || '{}');
+        if(!CURRENT_USER) return;
+        const dept = CURRENT_USER.dept;
+        let managerName = '';
+        Object.keys(users).forEach(k => {
+            const u = users[k];
+            if(u.role === 'manager' && u.dept === dept) managerName = u.name;
+        });
+        document.getElementById('manager-name').value = managerName;
+    }
+
+    // ---- small utilities ----
+    function escapeHtml(s) {
+        if(!s && s !== 0) return '';
+        return String(s).replace(/[&<>"']/g, function(m) {
+            return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+        });
+    }
+
+    // ---- Auto-login last user if remember me ----
+    (function initAutoLogin() {
+        const last = localStorage.getItem('rbac_last_user');
+        if(last) {
+            const users = JSON.parse(localStorage.getItem('rbac_users') || '{}');
+            if(users[last]) {
+                document.getElementById('login-username').value = last;
+            }
+        }
+    })();
+
+    // ---- small helper view to show form by clicking from menu ----
+    function showForm(e, title) {
+        e.stopPropagation();
+        document.getElementById("form-container").style.display = "block";
+        document.getElementById("form-title").innerText = title + " Work Report Form";
+        toggleFormBody();
+        resetTable();
+        prefillManager();
+        document.getElementById('panel-area').innerHTML = '';
+    }
 </script>
+"""
 
 </body>
 </html>
