@@ -95,7 +95,6 @@
     .hidden { display:none; }
     .flex { display:flex; gap:10px; align-items:center; }
 
-    /* responsive */
     @media (max-width: 900px) {
         .layout { flex-direction: column; }
         .sidebar { width: 100%; order: 2; }
@@ -105,7 +104,7 @@
 </head>
 <body>
 
-<!-- --- LOGIN SECTION --- -->
+<!-- LOGIN SECTION -->
 <div id="login-section" class="login-container">
     <div class="login-box">
         <h2>Welcome Back</h2>
@@ -123,7 +122,7 @@
     </div>
 </div>
 
-<!-- --- Main App --- -->
+<!-- MAIN APP -->
 <div class="app-wrapper" id="app-wrapper">
     <div class="layout">
         <div class="sidebar">
@@ -701,7 +700,35 @@
         prefillManager();
         document.getElementById('panel-area').innerHTML = '';
     }
+</script>
+    <!-- COPY your full layout HTML from Python template here (sidebar, form, panels) -->
+</div>
 
+<script>
+// --- DYNAMIC DATE SETUP ---
+window.addEventListener('DOMContentLoaded', (event) => {
+    const dateInput = document.getElementById('report-date');
+    if (dateInput) {
+        const today = new Date();
+        const minDate = new Date(today);
+        minDate.setDate(today.getDate() - 2);
+
+        const formatDate = (d) => {
+            const yyyy = d.getFullYear();
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        };
+
+        dateInput.min = formatDate(minDate);
+        dateInput.max = formatDate(today);
+        dateInput.value = formatDate(today);
+    }
+});
+
+// --- COPY ALL JAVASCRIPT FROM YOUR PYTHON TEMPLATE HERE ---
+// (Login, Logout, Form logic, Drafts, Reports, Admin/Manager panels, etc.)
+
+</script>
 </body>
 </html>
-
